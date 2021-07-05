@@ -1,5 +1,8 @@
-import pyautogui, time, threading, random
+import pyautogui, time, threading, random, sys
 pyautogui.FAILSAFE = True
+
+run_time = 30 #time for program to run in minutes
+
 
 time.sleep(3)
 
@@ -13,6 +16,10 @@ def type(arg):
 
 def deposit():
     type('pls dep max')
+
+def kill_timer():
+    time.sleep(run_time * 60)
+    sys.exit()
 
 #######################################
 
@@ -56,13 +63,29 @@ def trivia():
 
 #######################################
 
+def test():
+    x = 1
+    while True:
+        type(str(x))
+        time.sleep(1)
+        x += 1
+
+#######################################
+
 #t1 = threading.Thread(target=fourty_five_sec)
 #t2 = threading.Thread(target=fourty_sec)
+#t3 = threading.Thread(target=trivia)
+#kill = threading.Thread(target=kill_timer)
+#test_thread = threading.Thread(target=test)
+
 #fourty_sec_idle = True
 #fourty_five_sec_idle = False
 
 #t1.start()
 #t2.start()
+#t3.start()
+#test_thread.start()
+#kill.start()
 
 
-trivia()
+#TODO: Prevent collisions between threads
