@@ -85,7 +85,6 @@ async def on_message(message):
                 #await message.channel.send("answer: " + correct_answer)
                 #await message.channel.send("letter: " + letter)
 
-                #TODO: Sanitize database inputs
                 c.execute("INSERT INTO trivia_answers (Question, Options, Answer, Letter) VALUES (?, ?, ?, ?)", (question, options, correct_answer, letter))
                 conn.commit()
 
