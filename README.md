@@ -13,4 +13,11 @@ Additional script for automating trivia commands requires pyautogui
 `pip install pyautogui`
 
 ## Usage
+### scraper bot
+Create discord bot and invite to server. 
 
+Create .env file with discord bot token.
+
+Create sqlite db and table.
+
+Start bot.py using python.
