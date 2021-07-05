@@ -22,10 +22,10 @@ Create sqlite db and table.
 
 Start bot.py using python.
 ### trivia command 
-Run dank.py to automate dankmemer commands. 
+Run dank.py to automate dankmemer commands (still in progress)
 
 ### TODO: 
 
 - create bot command to query database, see status, etc.
-- threading on dank.py to automate more dank memer commands and query database for trivia
+- threading on dank.py to automate dank memer commands and query database for trivia
 - integrate scripts together
