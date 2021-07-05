@@ -21,3 +21,11 @@ Create .env file with discord bot token.
 Create sqlite db and table.
 
 Start bot.py using python.
+### trivia command 
+Run dank.py to automate dankmemer commands. 
+
+### TODO: 
+
+- create bot command to query database, see status, etc.
+- threading on dank.py to automate more dank memer commands and query database for trivia
+- integrate scripts together
