@@ -94,14 +94,14 @@ async def on_message(message):
             number_of_rows = c.fetchone()[0]
             row_offset = number_of_rows - 10
             c.execute("SELECT * FROM trivia_answers LIMIT (?),10", (row_offset,))
-            send_list = ''
+            send_list = 'Total Rows: ' + str(number_of_rows) + '\n' 
             for row in c:
                 send_list = send_list + str(row) + '\n' 
             await message.channel.send(send_list)
         
         if cmd == '-q' or cmd == '--query':
             query = bot_input[2]
-            c.execute("SELECT * FROM trivia_answers WHERE Question LIKE '%(?)%'", (query))
+            c.execute("SELECT * FROM trivia_answers WHERE Question LIKE '%(?)%'", (query,))
             send_list = ''
             for row in c:
                 send_list = send_list + str(row) + '\n'
