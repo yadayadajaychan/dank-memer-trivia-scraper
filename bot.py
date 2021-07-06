@@ -113,7 +113,7 @@ async def on_message(message):
 
             if send_list:
                 if len(send_list) > 4000:
-                    await message.channel.send("i'll fix this later")
+                    await message.channel.send("Message too large to send. Please narrow search query.")
                 else:
                     await message.channel.send(send_list)
             else:
