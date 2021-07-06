@@ -92,7 +92,7 @@ def test():
 
 #######################################
 i = 1
-while i <= 3:
+while i <= 100:
     type('pls triv')
     time.sleep(random.uniform(0.5, 2.5))
     type(random.choice(['A', 'B', 'C', 'D']))
