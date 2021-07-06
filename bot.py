@@ -112,7 +112,7 @@ async def on_message(message):
                 send_list = send_list + str(row) + '\n\n'
 
             if send_list:
-                if len(send_list) > 4000:
+                if len(send_list) > 2000:
                     await message.channel.send("Message too large to send. Please narrow search query.")
                 else:
                     await message.channel.send(send_list)
@@ -128,8 +128,6 @@ async def on_message(message):
 
         elif cmd == '-s' or cmd == '--send':
             await message.channel.send(file=discord.File('trivia.db'))
-
-
 
         elif cmd == '-i' or cmd == '--info':
             await message.channel.send("source code for this bot can be viewed at <https://github.com/yadayadajaychan/dank-memer-trivia-scraper>")
