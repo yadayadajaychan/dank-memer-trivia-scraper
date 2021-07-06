@@ -110,7 +110,11 @@ async def on_message(message):
             send_list = ''
             for row in c:
                 send_list = send_list + str(row) + '\n'
-            await message.channel.send(send_list)
+
+            if send_list:
+                await message.channel.send(send_list)
+            else:
+                await message.channel.send("No results")
 
 
             #TODO fix database calls, empty message, and discord message limit
