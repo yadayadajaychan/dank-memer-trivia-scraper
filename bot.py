@@ -98,7 +98,10 @@ async def on_message(message):
             for row in c.fetchall():
                 send_list = send_list + str(row) + '\n' 
             await message.channel.send(send_list)
-
+        
+        if cmd == '-h' or cmd == '--help':
+            help_mesg = "`-h`, `--help`\n    displays help message\n`-l`, `--list`\n    lists entries in database\n    defaults to last 10 entries\n    optional arguments: OFFSET, ROWS"
+            await message.channel.send(help_mesg)
 
 
 
