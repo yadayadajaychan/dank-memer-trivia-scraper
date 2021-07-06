@@ -94,14 +94,40 @@ async def on_message(message):
             number_of_rows = c.fetchone()[0]
             row_offset = number_of_rows - 10
             c.execute("SELECT * FROM trivia_answers LIMIT (?),10", (row_offset,))
-            send_list = ''
-            for row in c.fetchall():
-                send_list = send_list + str(row) + '\n' 
+            send_list = 'Total Rows: ' + str(number_of_rows) + '\n\n' 
+            for row in c:
+                send_list = send_list + str(row) + '\n\n' 
             await message.channel.send(send_list)
         
-        if cmd == '-h' or cmd == '--help':
-            help_mesg = "`-h`, `--help`\n    displays help message\n`-l`, `--list`\n    lists entries in database\n    defaults to last 10 entries\n    optional arguments: OFFSET, ROWS (TODO)\n`-q`, `--query`\n    queries database for question (TODO)\n`-s`, `--send`\n    sends current database to chat (TODO)"
+        elif cmd == '-q' or cmd == '--query':
+            full_query = ''
+            for arg in bot_input[2:len(bot_input)]:
+                full_query = full_query + arg + ' '
+            full_query = full_query[:-1]
+            query = '%' + full_query + '%'
+
+            c.execute("SELECT * FROM trivia_answers WHERE Question LIKE (?)", (query,))
+            send_list = ''
+            for row in c:
+                send_list = send_list + str(row) + '\n\n'
+
+            if send_list:
+                if len(send_list) > 4000:
+                    await message.channel.send("Message too large to send. Please narrow search query.")
+                else:
+                    await message.channel.send(send_list)
+            else:
+                await message.channel.send("No results")
+
+
+            #TODO fix database calls, empty message, and discord message limit
+
+        elif cmd == '-h' or cmd == '--help':
+            help_mesg = "`-h`, `--help`\n    displays help message\n`-l`, `--list`\n    lists entries in database\n    defaults to last 10 entries\n    optional arguments: OFFSET, ROWS (TODO)\n`-q`, `--query`\n    queries database for question (case insensitive)\n`-s`, `--send`\n    sends current database to chat (TODO)\n`-i`, `--info`\n    view info about this bot"
             await message.channel.send(help_mesg)
+
+        elif cmd == '-i' or cmd == '--info':
+            await message.channel.send("source code for this bot can be viewed at <https://github.com/yadayadajaychan/dank-memer-trivia-scraper>")
 
 
 
