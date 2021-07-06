@@ -126,6 +126,11 @@ async def on_message(message):
             help_mesg = "`-h`, `--help`\n    displays help message\n`-l`, `--list`\n    lists entries in database\n    defaults to last 10 entries\n    optional arguments: OFFSET, ROWS (TODO)\n`-q`, `--query`\n    queries database for question (case insensitive)\n`-s`, `--send`\n    sends current database to chat (TODO)\n`-i`, `--info`\n    view info about this bot"
             await message.channel.send(help_mesg)
 
+        elif cmd == '-s' or cmd == '--send':
+            await message.channel.send(file=discord.File('trivia.db'))
+
+
+
         elif cmd == '-i' or cmd == '--info':
             await message.channel.send("source code for this bot can be viewed at <https://github.com/yadayadajaychan/dank-memer-trivia-scraper>")
 
