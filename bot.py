@@ -99,8 +99,13 @@ async def on_message(message):
                 send_list = send_list + str(row) + '\n' 
             await message.channel.send(send_list)
         
-        if cmd == '-q' or cmd == '--query':
-            query = '%' + bot_input[2] + '%'
+        elif cmd == '-q' or cmd == '--query':
+            full_query = ''
+            for arg in bot_input[2:len(bot_input)]:
+                full_query = full_query + arg + ' '
+            full_query = full_query[:-1]
+            query = '%' + full_query + '%'
+
             c.execute("SELECT * FROM trivia_answers WHERE Question LIKE (?)", (query,))
             send_list = ''
             for row in c:
@@ -110,7 +115,7 @@ async def on_message(message):
 
             #TODO fix database calls and discord message limit
 
-        if cmd == '-h' or cmd == '--help':
+        elif cmd == '-h' or cmd == '--help':
             help_mesg = "`-h`, `--help`\n    displays help message\n`-l`, `--list`\n    lists entries in database\n    defaults to last 10 entries\n    optional arguments: OFFSET, ROWS (TODO)\n`-q`, `--query`\n    queries database for question (case insensitive)\n`-s`, `--send`\n    sends current database to chat (TODO)"
             await message.channel.send(help_mesg)
 
