@@ -96,5 +96,6 @@ while i <= 100:
     type('pls triv')
     time.sleep(random.uniform(0.5, 2.5))
     type(random.choice(['A', 'B', 'C', 'D']))
-    time.sleep(random.uniform(15, 20))
+    print(i)
     i += 1
+    time.sleep(random.uniform(15, 20))
