@@ -15,18 +15,12 @@ def check_non_empty(arg):
 conn = sqlite3.connect("trivia.db")
 c = conn.cursor()
 
+
 @client.event
 async def on_message(message):
     if message.author == client.user:
         return
-    #TODO: Query database command
-    #if message.content.startswith('jhetto'):
-        #async for msg in message.channel.history(limit=20):
-        #    if msg.author != client.user:
-        #        if check_non_empty(msg):
-        #            sendmsg = 'Message content: ' + str(msg.content) + '\n' + 'Message author: ' + str(msg.author.name) + '\n' + 'Message sent: ' + str(msg.created_at) + '\n' + str(msg)
-        #            await message.channel.send(sendmsg)
-
+    
     for embed in message.embeds:
         if "trivia question" in str(embed.author):
 
@@ -87,6 +81,31 @@ async def on_message(message):
 
                 c.execute("INSERT INTO trivia_answers (Question, Options, Answer, Letter) VALUES (?, ?, ?, ?)", (question, options, correct_answer, letter))
                 conn.commit()
+
+    if message.content.startswith('db'):
+        bot_input = message.content.lower().split()
+        if len(bot_input) > 1:
+            cmd = bot_input[1]
+        else:
+            cmd = "--help"
+
+        if cmd == '-l' or cmd == '--list':
+            c.execute("SELECT COUNT(*) FROM trivia_answers")
+            number_of_rows = c.fetchone()[0]
+            row_offset = number_of_rows - 10
+            c.execute("SELECT * FROM trivia_answers LIMIT (?),10", (row_offset,))
+            send_list = ''
+            for row in c.fetchall():
+                send_list = send_list + str(row) + '\n' 
+            await message.channel.send(send_list)
+        
+        if cmd == '-h' or cmd == '--help':
+            help_mesg = "`-h`, `--help`\n    displays help message\n`-l`, `--list`\n    lists entries in database\n    defaults to last 10 entries\n    optional arguments: OFFSET, ROWS (TODO)\n`-q`, `--query`\n    queries database for question (TODO)\n`-s`, `--send`\n    sends current database to chat (TODO)"
+            await message.channel.send(help_mesg)
+
+
+
+
 
 token = os.getenv('token')
 client.run(token)
