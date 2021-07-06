@@ -1,4 +1,5 @@
 import discord, logging, os, sqlite3
+from discord.ext import commands
 from dotenv import load_dotenv
 from sqlite3 import Error
 load_dotenv()
@@ -15,18 +16,21 @@ def check_non_empty(arg):
 conn = sqlite3.connect("trivia.db")
 c = conn.cursor()
 
+bot = commands.Bot(command_prefix='db ')
+
+@bot.command()
+async def ls(ctx):
+    row_offset = c.execute("SELECT COUNT(*) FROM trivia_answers") - 10
+    c.execute("SELECT * FROM trivia_answers LIMIT (?),10", (row_offset))
+    for row in c.fetchall():
+        await ctx.send(row)
+
+
 @client.event
 async def on_message(message):
     if message.author == client.user:
         return
-    #TODO: Query database command
-    #if message.content.startswith('jhetto'):
-        #async for msg in message.channel.history(limit=20):
-        #    if msg.author != client.user:
-        #        if check_non_empty(msg):
-        #            sendmsg = 'Message content: ' + str(msg.content) + '\n' + 'Message author: ' + str(msg.author.name) + '\n' + 'Message sent: ' + str(msg.created_at) + '\n' + str(msg)
-        #            await message.channel.send(sendmsg)
-
+    
     for embed in message.embeds:
         if "trivia question" in str(embed.author):
 
