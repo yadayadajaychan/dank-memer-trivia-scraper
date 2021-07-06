@@ -89,3 +89,12 @@ def test():
 
 
 #TODO: Prevent collisions between threads
+
+#######################################
+i = 1
+while i <= 3:
+    type('pls triv')
+    time.sleep(random.uniform(0.5, 2.5))
+    type(random.choice(['A', 'B', 'C', 'D']))
+    time.sleep(random.uniform(15, 20))
+    i += 1
