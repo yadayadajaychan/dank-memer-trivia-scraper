@@ -94,7 +94,7 @@ async def on_message(message):
             number_of_rows = c.fetchone()[0]
             row_offset = number_of_rows - 10
             c.execute("SELECT * FROM trivia_answers LIMIT (?),10", (row_offset,))
-            global send_list
+            send_list = ''
             for row in c.fetchall():
                 send_list = send_list + str(row) + '\n' 
                 await message.channel.send(send_list)
