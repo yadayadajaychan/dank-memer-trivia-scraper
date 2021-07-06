@@ -100,7 +100,7 @@ async def on_message(message):
             await message.channel.send(send_list)
         
         if cmd == '-h' or cmd == '--help':
-            help_mesg = "`-h`, `--help`\n    displays help message\n`-l`, `--list`\n    lists entries in database\n    defaults to last 10 entries\n    optional arguments: OFFSET, ROWS"
+            help_mesg = "`-h`, `--help`\n    displays help message\n`-l`, `--list`\n    lists entries in database\n    defaults to last 10 entries\n    optional arguments: OFFSET, ROWS (TODO)\n`-q`, `--query`\n    queries database for question (TODO)"
             await message.channel.send(help_mesg)
 
 
