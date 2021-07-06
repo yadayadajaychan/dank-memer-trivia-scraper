@@ -127,7 +127,7 @@ async def on_message(message):
             await message.channel.send(help_mesg)
 
         elif cmd == '-i' or cmd == '--info':
-            await message.channel.send("source code for this bot can be viewed at https://github.com/yadayadajaychan/dank-memer-trivia-scraper")
+            await message.channel.send("source code for this bot can be viewed at <https://github.com/yadayadajaychan/dank-memer-trivia-scraper>")
 
 
 
