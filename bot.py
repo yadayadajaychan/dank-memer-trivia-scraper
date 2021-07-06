@@ -90,7 +90,9 @@ async def on_message(message):
             cmd = "--help"
 
         if cmd == '-l' or cmd == '--list':
-            row_offset = c.execute("SELECT COUNT(*) FROM trivia_answers") - 10
+            c.execute("SELECT COUNT(*) FROM trivia_answers")
+            number_of_rows = c.fetchone()[0]
+            row_offset = number_of_rows - 10
             c.execute("SELECT * FROM trivia_answers LIMIT (?),10", (row_offset))
             for row in c.fetchall():
                 await message.channel.send(row)
