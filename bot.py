@@ -123,7 +123,7 @@ async def on_message(message):
             #TODO fix database calls, empty message, and discord message limit
 
         elif cmd == '-h' or cmd == '--help':
-            help_mesg = "`-h`, `--help`\n    displays help message\n`-l`, `--list`\n    lists entries in database\n    defaults to last 10 entries\n    optional arguments: OFFSET, ROWS (TODO)\n`-q`, `--query`\n    queries database for question (case insensitive)\n`-s`, `--send`\n    sends current database to chat (TODO)\n`-i`, `--info`\n    view info about this bot"
+            help_mesg = "`-h`, `--help`\n    displays help message\n`-l`, `--list`\n    lists entries in database\n    defaults to last 10 entries\n    optional arguments: OFFSET, ROWS (TODO)\n`-q`, `--query`\n    queries database for question (case insensitive)\n`-s`, `--send`\n    sends current database to chat\n`-i`, `--info`\n    view info about this bot"
             await message.channel.send(help_mesg)
 
         elif cmd == '-s' or cmd == '--send':
