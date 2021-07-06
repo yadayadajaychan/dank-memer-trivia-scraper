@@ -100,8 +100,8 @@ async def on_message(message):
             await message.channel.send(send_list)
         
         if cmd == '-q' or cmd == '--query':
-            query = bot_input[2]
-            c.execute("SELECT * FROM trivia_answers WHERE Question LIKE '%(?)%'", (query,))
+            query = '%' + bot_input[2] + '%'
+            c.execute("SELECT * FROM trivia_answers WHERE Question LIKE (?)", (query,))
             send_list = ''
             for row in c:
                 send_list = send_list + str(row) + '\n'
