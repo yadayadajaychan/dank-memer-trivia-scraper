@@ -1,5 +1,4 @@
 import discord, logging, os, sqlite3
-from discord.ext import commands
 from dotenv import load_dotenv
 from sqlite3 import Error
 load_dotenv()
@@ -15,15 +14,6 @@ def check_non_empty(arg):
 
 conn = sqlite3.connect("trivia.db")
 c = conn.cursor()
-
-bot = commands.Bot(command_prefix='db ')
-
-@bot.command()
-async def ls(ctx):
-    row_offset = c.execute("SELECT COUNT(*) FROM trivia_answers") - 10
-    c.execute("SELECT * FROM trivia_answers LIMIT (?),10", (row_offset))
-    for row in c.fetchall():
-        await ctx.send(row)
 
 
 @client.event
@@ -91,6 +81,24 @@ async def on_message(message):
 
                 c.execute("INSERT INTO trivia_answers (Question, Options, Answer, Letter) VALUES (?, ?, ?, ?)", (question, options, correct_answer, letter))
                 conn.commit()
+
+    if message.content.startswith('db'):
+        bot_input = message.content.lower().split()
+        if len(bot_input) > 1:
+            cmd = bot_input[1]
+        else:
+            cmd = "--help"
+
+        if cmd == '-l' or cmd == '--list':
+            row_offset = c.execute("SELECT COUNT(*) FROM trivia_answers") - 10
+            c.execute("SELECT * FROM trivia_answers LIMIT (?),10", (row_offset))
+            for row in c.fetchall():
+                await message.channel.send(row)
+
+
+
+
+
 
 token = os.getenv('token')
 client.run(token)
