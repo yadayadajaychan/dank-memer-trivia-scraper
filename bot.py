@@ -102,12 +102,34 @@ async def on_message(message):
         if cmd == '-l' or cmd == '--list':
             c.execute("SELECT COUNT(*) FROM trivia_answers")
             number_of_rows = c.fetchone()[0]
-            row_offset = number_of_rows - 10
-            c.execute("SELECT * FROM trivia_answers LIMIT (?),10", (row_offset,))
-            send_list = 'Total Rows: ' + str(number_of_rows) + '\n\n' 
-            for row in c:
-                send_list = send_list + str(row) + '\n\n' 
-            await message.channel.send(send_list)
+
+            if len(bot_input) == 2:
+                row_offset = number_of_rows - 10
+                c.execute("SELECT * FROM trivia_answers LIMIT (?),10", (row_offset,))
+                send_list = 'Total Rows: ' + str(number_of_rows) + '\n\n' 
+                for row in c:
+                    send_list = send_list + str(row) + '\n\n' 
+                await message.channel.send(send_list)
+
+            elif len(bot_input) == 3:
+                #3rd argument is passed as OFFSET, negative starts from bottom of list
+                third_arg = int(bot_input[2])
+                if third_arg >= 0:
+                    c.execute("SELECT * FROM trivia_answers LIMIT (?),10", (third_arg,))
+                    send_list = 'Total Rows: ' + str(number_of_rows) + '\n' + 'Offset: ' + bot_input[2] + '\n\n'
+                    for row in c:
+                        send_list = send_list + str(row) + '\n\n' 
+                    await message.channel.send(send_list)
+                else:
+                    row_offset = number_of_rows + third_arg
+                    c.execute("SELECT * FROM trivia_answers LIMIT (?),10", (row_offset,))
+                    send_list = 'Total Rows: ' + str(number_of_rows) + '\n' + 'Offset: ' + str(row_offset) + '\n\n' 
+                    for row in c:
+                        send_list = send_list + str(row) + '\n\n' 
+                    await message.channel.send(send_list)
+
+#            elif len(bot_input) == 4:
+                #3rd arg is offset, 4th is limit
         
         elif cmd == '-q' or cmd == '--query':
             full_query = ''
@@ -133,7 +155,7 @@ async def on_message(message):
             #TODO fix database calls, empty message, and discord message limit
 
         elif cmd == '-h' or cmd == '--help':
-            help_mesg = "`-h`, `--help`\n    displays help message\n`-l`, `--list`\n    lists entries in database\n    defaults to last 10 entries\n    optional arguments: OFFSET, ROWS (TODO)\n`-q`, `--query`\n    queries database for question (case insensitive)\n`-s`, `--send`\n    sends current database to chat\n`-i`, `--info`\n    view info about this bot"
+            help_mesg = "`-h`, `--help`\n    displays help message\n`-l`, `--list`\n    lists entries in database, defaults to last 10 entries\n    optional arguments: OFFSET, LIMIT\n    `OFFSET`: offset to read database from, if only one argument is given, it is assumed to be offset\n    `LIMIT`: maximum number of rows to display\n        negative offset reads from bottom of table\n        negative limit results in no upper bound on number of rows returned\n`-q`, `--query`\n    queries database for question (case insensitive)\n`-s`, `--send`\n    sends current database to chat\n`-i`, `--info`\n    view info about this bot"
             await message.channel.send(help_mesg)
 
         elif cmd == '-s' or cmd == '--send':
