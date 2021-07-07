@@ -132,27 +132,31 @@ async def on_message(message):
                 #3rd arg is offset, 4th is limit
         
         elif cmd == '-q' or cmd == '--query':
-            full_query = ''
-            for arg in bot_input[2:len(bot_input)]:
-                full_query = full_query + arg + ' '
-            full_query = full_query[:-1]
-            query = '%' + full_query + '%'
+            if len(bot_input) >= 3:
+                full_query = ''
+                for arg in bot_input[2:len(bot_input)]:
+                    full_query = full_query + arg + ' '
+                full_query = full_query[:-1]
+                query = '%' + full_query + '%'
+                c.execute("SELECT * FROM trivia_answers WHERE Question LIKE (?)", (query,))
+                send_list = ''
+                for row in c:
+                    send_list = send_list + str(row) + '\n\n'
+                    if len(send_list) >= 1750:
+                        await message.channel.send(send_list)
+                        send_list = ''
 
-            c.execute("SELECT * FROM trivia_answers WHERE Question LIKE (?)", (query,))
-            send_list = ''
-            for row in c:
-                send_list = send_list + str(row) + '\n\n'
-
-            if send_list:
-                if len(send_list) > 2000:
-                    await message.channel.send("Message too large to send. Please narrow search query.")
+                if str(c.fetchone()):
+                    if send_list:
+                        await message.channel.send(send_list)
+                    await message.channel.send("\n\nDone!")
                 else:
-                    await message.channel.send(send_list)
+                    await message.channel.send("No results")
             else:
-                await message.channel.send("No results")
+                await message.channel.send("Need to provide search pattern")
 
 
-            #TODO fix database calls, empty message, and discord message limit
+            #TODO efficient database calls, empty message, and discord message limit
 
         elif cmd == '-h' or cmd == '--help':
             help_mesg = "`-h`, `--help`\n    displays help message\n`-l`, `--list`\n    lists entries in database, defaults to last 10 entries\n    optional arguments: OFFSET, LIMIT\n    `OFFSET`: offset to read database from, if only one argument is given, it is assumed to be offset\n    `LIMIT`: maximum number of rows to display\n        negative offset reads from bottom of table\n        negative limit results in no upper bound on number of rows returned\n`-q`, `--query`\n    queries database for question (case insensitive)\n`-s`, `--send`\n    sends current database to chat\n`-i`, `--info`\n    view info about this bot"
