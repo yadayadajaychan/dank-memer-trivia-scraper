@@ -33,54 +33,64 @@ async def on_message(message):
                 if m.channel == message.channel and m.author.id == 270904126974590976:
                     return True
 
-            msg = await client.wait_for('message', check=check, timeout=30)
-            dank = await client.wait_for('message', check=answer, timeout=30)
-            #await message.channel.send(msg.content)
-            #await message.channel.send(dank.content)
-            if dank.reference.message_id == msg.id:
-                descr = str(embed.description).replace('*', '').split('\n')
-                question = descr[0]
-                #await message.channel.send("question: " + question)
+            descr = str(embed.description).replace('*', '').split('\n')
+            
+            question = descr[0]
+            c.execute("SELECT * FROM trivia_answers WHERE Question=(?)", (question,))
+            trivia_answer = c.fetchone()
+            if trivia_answer:
+                await message.channel.send(f"Answer is {trivia_answer[3]}, {trivia_answer[2]}")
+#check database for question and if string is non-empty, type answer in chat
+#else add question and answer to database
+            else:
+                msg = await client.wait_for('message', check=check, timeout=30)
+                dank = await client.wait_for('message', check=answer, timeout=30)
+                #await message.channel.send(msg.content)
+                #await message.channel.send(dank.content)
+                if dank.reference.message_id == msg.id:
+                    
+                    
+                    #await message.channel.send("question: " + question)
 
-                option_a = str(descr[3]).replace('A) ', '').replace('*', '')
-                option_b = str(descr[4]).replace('B) ', '').replace('*', '')
-                option_c = str(descr[5]).replace('C) ', '').replace('*', '')
-                option_d = str(descr[6]).replace('D) ', '').replace('*', '')
-                options = option_a + '\n'+ option_b + '\n'+ option_c + '\n'+ option_d
-                #await message.channel.send("options: " + options) 
-                
-                global letter
-                global correct_answer
+                    option_a = str(descr[3]).replace('A) ', '').replace('*', '')
+                    option_b = str(descr[4]).replace('B) ', '').replace('*', '')
+                    option_c = str(descr[5]).replace('C) ', '').replace('*', '')
+                    option_d = str(descr[6]).replace('D) ', '').replace('*', '')
+                    options = option_a + '\n'+ option_b + '\n'+ option_c + '\n'+ option_d
+                    #await message.channel.send("options: " + options) 
+                    
+                    global letter
+                    global correct_answer
 
-                if 'coin' in str(dank.content):
-                    letter = str(msg.content).upper()
-                    if letter == 'A':
-                        correct_answer = option_a
-                    elif letter == 'B':
-                        correct_answer = option_b
-                    elif letter == 'C':
-                        correct_answer = option_c
-                    elif letter == 'D':
-                        correct_answer = option_d
-                elif 'no' in str(dank.content):
-                    correct_answer = str(dank.content).split('`')[1]
-                    if correct_answer == option_a:
-                        letter = 'A'
-                    elif correct_answer == option_b:
-                        letter = 'B'
-                    elif correct_answer == option_c:
-                        letter = 'C'
-                    elif correct_answer == option_d:
-                        letter = 'D'
-                else:
-                    await message.channel.send("error parsing dankmemer response, not committing answer to database")
-                    return None
+                    if 'coin' in str(dank.content):
+                        letter = str(msg.content).upper()
+                        if letter == 'A':
+                            correct_answer = option_a
+                        elif letter == 'B':
+                            correct_answer = option_b
+                        elif letter == 'C':
+                            correct_answer = option_c
+                        elif letter == 'D':
+                            correct_answer = option_d
+                    elif 'no' in str(dank.content):
+                        correct_answer = str(dank.content).split('`')[1]
+                        if correct_answer == option_a:
+                            letter = 'A'
+                        elif correct_answer == option_b:
+                            letter = 'B'
+                        elif correct_answer == option_c:
+                            letter = 'C'
+                        elif correct_answer == option_d:
+                            letter = 'D'
+                    else:
+                        await message.channel.send("error parsing dankmemer response, not committing answer to database")
+                        return None
 
-                #await message.channel.send("answer: " + correct_answer)
-                #await message.channel.send("letter: " + letter)
+                    #await message.channel.send("answer: " + correct_answer)
+                    #await message.channel.send("letter: " + letter)
 
-                c.execute("INSERT INTO trivia_answers (Question, Options, Answer, Letter) VALUES (?, ?, ?, ?)", (question, options, correct_answer, letter))
-                conn.commit()
+                    c.execute("INSERT INTO trivia_answers (Question, Options, Answer, Letter) VALUES (?, ?, ?, ?)", (question, options, correct_answer, letter))
+                    conn.commit()
 
     if message.content.startswith('db'):
         bot_input = message.content.lower().split()
