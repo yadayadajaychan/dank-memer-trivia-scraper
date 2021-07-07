@@ -128,8 +128,26 @@ async def on_message(message):
                         send_list = send_list + str(row) + '\n\n' 
                     await message.channel.send(send_list)
 
-#            elif len(bot_input) == 4:
+            elif len(bot_input) == 4:
                 #3rd arg is offset, 4th is limit
+                third_arg = int(bot_input[2])                                                                        
+                limit = int(bot_input[3])
+                if third_arg >= 0:
+                    c.execute("SELECT * FROM trivia_answers LIMIT (?),(?)", (third_arg, limit))
+                    send_list = 'Total Rows: ' + str(number_of_rows) + '\n' + 'Offset: ' + bot_input[2] + '\n' + 'Limit: ' + bot_input[3] + '\n\n'
+                    for row in c:
+                        send_list = send_list + str(row) + '\n\n' 
+                    await message.channel.send(send_list)
+                else:
+                    row_offset = number_of_rows + third_arg
+                    c.execute("SELECT * FROM trivia_answers LIMIT (?),(?)", (row_offset, limit,))
+                    send_list = 'Total Rows: ' + str(number_of_rows) + '\n' + 'Offset: ' + str(row_offset) + '\n' + 'Limit: ' + bot_input[3] + '\n\n'
+                    for row in c:
+                        send_list = send_list + str(row) + '\n\n' 
+                    await message.channel.send(send_list)
+
+
+
         
         elif cmd == '-q' or cmd == '--query':
             if len(bot_input) >= 3:
