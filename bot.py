@@ -87,6 +87,9 @@ async def on_message(message):
                             correct_answer = option_c
                         elif letter == 'D':
                             correct_answer = option_d
+                        else:
+                            await message.channel.send("error")
+                            return
                     elif 'no' in str(dank.content):
                         correct_answer = str(dank.content).split('`')[1]
                         if correct_answer == option_a:
@@ -97,6 +100,9 @@ async def on_message(message):
                             letter = 'C'
                         elif correct_answer == option_d:
                             letter = 'D'
+                        else:
+                            await message.channel.send("error")
+                            return
                     else:
                         await message.channel.send("error parsing dankmemer response, not committing answer to database")
                         return None
