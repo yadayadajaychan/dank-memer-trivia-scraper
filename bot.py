@@ -101,7 +101,7 @@ async def on_message(message):
                         elif correct_answer == option_d:
                             letter = 'D'
                         else:
-                            await message.channel.send("error")
+                            await message.channel.send("error, not committing to database")
                             return
                     else:
                         await message.channel.send("error parsing dankmemer response, not committing answer to database")
