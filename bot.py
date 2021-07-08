@@ -13,19 +13,15 @@ def check_non_empty(arg):
         return True
 
 def send_long_message(arg):
-    i = 0
     split_mesg = []
     for row in c:
         arg = arg + str(row) + '\n\n'
         if len(arg) >= 1700:
             split_mesg.append(arg)
             arg = ''
-    if str(c.fetchone()):
-        if arg:
-            split_mesg.append(arg)
-        split_mesg.append("Done!")
-    else:
-        split_mesg.append("No results")
+    if arg:
+        split_mesg.append(arg)
+    split_mesg.append("Done!")
     return split_mesg
 
 conn = sqlite3.connect("trivia.db")
@@ -133,13 +129,19 @@ async def on_message(message):
 
             elif len(bot_input) == 3:
                 #3rd argument is passed as OFFSET, negative starts from bottom of list
-                third_arg = int(bot_input[2])
+                try:
+                    third_arg = int(bot_input[2])
+                except ValueError:
+                    await message.channel.send("Not an integer!")
+                    return
+                except:
+                    await message.channel.send("Error")
+                    return
                 if third_arg >= 0:
                     c.execute("SELECT * FROM trivia_answers LIMIT (?),10", (third_arg,))
                     send_list = 'Total Rows: ' + str(number_of_rows) + '\n' + 'Offset: ' + bot_input[2] + '\n\n'
                     for split in send_long_message(send_list):
                         await message.channel.send(split)
-                    
                 else:
                     row_offset = number_of_rows + third_arg
                     c.execute("SELECT * FROM trivia_answers LIMIT (?),10", (row_offset,))
@@ -149,14 +151,20 @@ async def on_message(message):
 
             elif len(bot_input) == 4:
                 #3rd arg is offset, 4th is limit
-                third_arg = int(bot_input[2])                                                                        
-                limit = int(bot_input[3])
+                try:
+                    third_arg = int(bot_input[2])                                                                        
+                    limit = int(bot_input[3])
+                except ValueError:
+                    await message.channel.send("Not an integer!")
+                    return
+                except:
+                    await message.channel.send("Error")
+                    return
                 if third_arg >= 0:
                     c.execute("SELECT * FROM trivia_answers LIMIT (?),(?)", (third_arg, limit))
                     send_list = 'Total Rows: ' + str(number_of_rows) + '\n' + 'Offset: ' + bot_input[2] + '\n' + 'Limit: ' + bot_input[3] + '\n\n'
                     for split in send_long_message(send_list):
                         await message.channel.send(split)
-
                 else:
                     row_offset = number_of_rows + third_arg
                     c.execute("SELECT * FROM trivia_answers LIMIT (?),(?)", (row_offset, limit,))
