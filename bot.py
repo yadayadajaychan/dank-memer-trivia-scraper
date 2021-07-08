@@ -74,8 +74,8 @@ async def on_message(message):
                     options = option_a + '\n'+ option_b + '\n'+ option_c + '\n'+ option_d
                     #await message.channel.send("options: " + options) 
                     
-                    global letter
-                    global correct_answer
+                    letter = ''
+                    correct_answer = ''
 
                     if 'coin' in str(dank.content):
                         letter = str(msg.content).upper()
