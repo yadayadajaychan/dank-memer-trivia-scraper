@@ -18,7 +18,7 @@ def check():
     c.execute("SELECT * FROM trivia_answers")
     for row in c:
         if row[2] not in row[1]:
-            print(row[0] + '\n')
+            print(str(row) + '\n')
 
 
 #create_table()
