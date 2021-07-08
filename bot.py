@@ -12,9 +12,24 @@ def check_non_empty(arg):
     else:
         return True
 
+def send_long_message(arg):
+    i = 0
+    split_mesg = []
+    for row in c:
+        arg = arg + str(row) + '\n\n'
+        if len(arg) >= 1700:
+            split_mesg.append(arg)
+            arg = ''
+    if str(c.fetchone()):
+        if arg:
+            split_mesg.append(arg)
+        split_mesg.append("Done!")
+    else:
+        split_mesg.append("No results")
+    return split_mesg
+
 conn = sqlite3.connect("trivia.db")
 c = conn.cursor()
-
 
 @client.event
 async def on_message(message):
@@ -117,16 +132,15 @@ async def on_message(message):
                 if third_arg >= 0:
                     c.execute("SELECT * FROM trivia_answers LIMIT (?),10", (third_arg,))
                     send_list = 'Total Rows: ' + str(number_of_rows) + '\n' + 'Offset: ' + bot_input[2] + '\n\n'
-                    for row in c:
-                        send_list = send_list + str(row) + '\n\n' 
-                    await message.channel.send(send_list)
+                    for split in send_long_message(send_list):
+                        await message.channel.send(split)
+                    
                 else:
                     row_offset = number_of_rows + third_arg
                     c.execute("SELECT * FROM trivia_answers LIMIT (?),10", (row_offset,))
                     send_list = 'Total Rows: ' + str(number_of_rows) + '\n' + 'Offset: ' + str(row_offset) + '\n\n' 
-                    for row in c:
-                        send_list = send_list + str(row) + '\n\n' 
-                    await message.channel.send(send_list)
+                    for split in send_long_message(send_list):
+                        await message.channel.send(split)
 
             elif len(bot_input) == 4:
                 #3rd arg is offset, 4th is limit
@@ -135,19 +149,15 @@ async def on_message(message):
                 if third_arg >= 0:
                     c.execute("SELECT * FROM trivia_answers LIMIT (?),(?)", (third_arg, limit))
                     send_list = 'Total Rows: ' + str(number_of_rows) + '\n' + 'Offset: ' + bot_input[2] + '\n' + 'Limit: ' + bot_input[3] + '\n\n'
-                    for row in c:
-                        send_list = send_list + str(row) + '\n\n' 
-                    await message.channel.send(send_list)
+                    for split in send_long_message(send_list):
+                        await message.channel.send(split)
+
                 else:
                     row_offset = number_of_rows + third_arg
                     c.execute("SELECT * FROM trivia_answers LIMIT (?),(?)", (row_offset, limit,))
                     send_list = 'Total Rows: ' + str(number_of_rows) + '\n' + 'Offset: ' + str(row_offset) + '\n' + 'Limit: ' + bot_input[3] + '\n\n'
-                    for row in c:
-                        send_list = send_list + str(row) + '\n\n' 
-                    await message.channel.send(send_list)
-
-
-
+                    for split in send_long_message(send_list):
+                        await message.channel.send(split)
         
         elif cmd == '-q' or cmd == '--query':
             if len(bot_input) >= 3:
@@ -158,18 +168,9 @@ async def on_message(message):
                 query = '%' + full_query + '%'
                 c.execute("SELECT * FROM trivia_answers WHERE Question LIKE (?)", (query,))
                 send_list = ''
-                for row in c:
-                    send_list = send_list + str(row) + '\n\n'
-                    if len(send_list) >= 1750:
-                        await message.channel.send(send_list)
-                        send_list = ''
-
-                if str(c.fetchone()):
-                    if send_list:
-                        await message.channel.send(send_list)
-                    await message.channel.send("\n\nDone!")
-                else:
-                    await message.channel.send("No results")
+                for split in send_long_message(send_list):
+                    await message.channel.send(split)
+                
             else:
                 await message.channel.send("Need to provide search pattern")
 
