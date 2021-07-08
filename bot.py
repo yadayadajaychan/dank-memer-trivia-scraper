@@ -157,6 +157,9 @@ async def on_message(message):
                     send_list = 'Total Rows: ' + str(number_of_rows) + '\n' + 'Offset: ' + str(row_offset) + '\n' + 'Limit: ' + bot_input[3] + '\n\n'
                     for split in send_long_message(send_list):
                         await message.channel.send(split)
+
+            elif len(bot_input) > 4:
+                await message.channel.send("Too many arguments")
         
         elif cmd == '-q' or cmd == '--query':
             if len(bot_input) >= 3:
