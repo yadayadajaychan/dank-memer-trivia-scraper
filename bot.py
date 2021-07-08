@@ -122,9 +122,8 @@ async def on_message(message):
                 row_offset = number_of_rows - 10
                 c.execute("SELECT * FROM trivia_answers LIMIT (?),10", (row_offset,))
                 send_list = 'Total Rows: ' + str(number_of_rows) + '\n\n' 
-                for row in c:
-                    send_list = send_list + str(row) + '\n\n' 
-                await message.channel.send(send_list)
+                for split in send_long_message(send_list):
+                    await message.channel.send(split)
 
             elif len(bot_input) == 3:
                 #3rd argument is passed as OFFSET, negative starts from bottom of list
