@@ -107,7 +107,7 @@ async def on_message(message):
 
                 if trivia_answer:
                     if trivia_answer[1] == options and trivia_answer[2] == correct_answer and trivia_answer[3] == letter:
-                        await message.channel.send("database is consistent")
+                        return
                     else:
                         await message.channel.send(f"<@{uid}>, discrepancy detected between database and answer")
                 else:
