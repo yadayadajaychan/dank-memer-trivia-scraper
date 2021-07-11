@@ -30,3 +30,4 @@ Run dank.py to automate dankmemer commands (still in progress)
 - integrate scripts together
 - set bot status
 - dm me error messages
+- timer
