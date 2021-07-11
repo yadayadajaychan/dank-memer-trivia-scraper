@@ -29,4 +29,4 @@ Run dank.py to automate dankmemer commands (still in progress)
 - threading on dank.py to automate dank memer commands and query database for trivia
 - integrate scripts together
 - set bot status
-- remove whitespace from end of string
+- dm me error messages
