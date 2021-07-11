@@ -86,7 +86,7 @@ async def on_message(message):
                         await message.channel.send("error")
                         return
                 elif 'no' in str(dank.content):
-                    correct_answer = str(dank.content).split('`')[1]
+                    correct_answer = str(dank.content).split('`')[1].rstrip()
                     if correct_answer == option_a:
                         letter = 'A'
                     elif correct_answer == option_b:
@@ -185,8 +185,7 @@ async def on_message(message):
                 full_query = ''
                 for arg in bot_input[2:len(bot_input)]:
                     full_query = full_query + arg + ' '
-                full_query = full_query[:-1]
-                query = '%' + full_query + '%'
+                query = '%' + full_query.rstrip() + '%'
                 c.execute("SELECT * FROM trivia_answers WHERE Question LIKE (?)", (query,))
                 send_list = ''
                 for split in send_long_message(send_list):
