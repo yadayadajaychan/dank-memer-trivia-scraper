@@ -1,4 +1,6 @@
 *.env
 *.db
 *.bak
+*.log
 answer.txt
+!example.env
