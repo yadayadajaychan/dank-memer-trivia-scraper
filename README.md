@@ -26,8 +26,7 @@ Run dank.py to automate dankmemer commands (still in progress)
 
 ### TODO: 
 
-- threading on dank.py to automate dank memer commands and query database for trivia
-- integrate scripts together
+- threading on dank.py to automate dank memer commands
 - set bot status
 - dm me error messages
 - timer
