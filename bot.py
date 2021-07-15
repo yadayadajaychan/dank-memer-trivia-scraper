@@ -52,6 +52,7 @@ async def on_message(message):
             trivia_answer = c.fetchone()
             if trivia_answer:
                 await message.channel.send(f"Answer is {trivia_answer[3]}, {trivia_answer[2]}")
+                open("answer.txt", "w").write(trivia_answer[3])
 
             msg = await client.wait_for('message', check=check, timeout=16)
             dank = await client.wait_for('message', check=answer, timeout=16)

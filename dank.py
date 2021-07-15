@@ -92,10 +92,12 @@ def test():
 
 #######################################
 i = 1
-while i <= 100:
+limit = random.uniform(100, 150)
+print(limit)
+while i <= limit:
     type('pls triv')
     time.sleep(random.uniform(2.5, 7.5))
-    type(random.choice(['A', 'B', 'C', 'D']))
+    type(open("answer.txt", "r").read())
     print(i)
     i += 1
     time.sleep(random.uniform(15, 20))
