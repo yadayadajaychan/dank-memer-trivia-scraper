@@ -1,5 +1,6 @@
 # Dank Memer Trivia Scraper
 A discord bot to scrape trivia answers from [Dank Memer](https://dankmemer.lol/) and store them in sqlite database
+
 (Dank Memer changed the trivia format, making this tool currently outdated)
 
 ## Requirements: 
